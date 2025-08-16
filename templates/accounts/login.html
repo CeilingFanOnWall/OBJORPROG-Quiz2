@@ -1,0 +1,29 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Login | Job Finder{% endblock %}
+{% block content %}
+<div style="background:#181818; border-radius:10px; box-shadow:0 2px 16px #000a; padding:32px 28px; min-width:320px; max-width:400px; width:100%;">
+    <h2 style="text-align:center; margin-bottom:18px;">Sign In</h2>
+    <form method="post" autocomplete="off">
+        {% csrf_token %}
+        <div style="margin-bottom:16px;">
+            <label for="id_email" style="color:#fff; display:block; margin-bottom:6px;">Email</label>
+            <input type="email" name="email" class="form-control" id="id_email" required style="width:100%; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px;">
+            {% if form.email.errors %}
+                <div style="color:#ff4d4d; font-size:0.95em;">{{ form.email.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        <div style="margin-bottom:16px;">
+            <label for="id_password" style="color:#fff; display:block; margin-bottom:6px;">Password</label>
+            <input type="password" name="password" class="form-control" id="id_password" required style="width:100%; padding:10px; background:#222; color:#fff; border:1px solid #444; border-radius:4px;">
+            {% if form.password.errors %}
+                <div style="color:#ff4d4d; font-size:0.95em;">{{ form.password.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        <button type="submit" style="width:100%; padding:10px; background:#fff; color:#111; border:none; border-radius:4px; font-weight:bold; cursor:pointer; margin-top:10px; transition:background 0.2s, color 0.2s;">Login</button>
+    </form>
+    <div style="margin-top:18px; text-align:center;">
+        <span>Don't have an account?</span>
+        <a href="{% url 'accounts:register' %}" style="color:#fff; text-decoration:underline;">Register</a>
+    </div>
+</div>
+{% endblock %}

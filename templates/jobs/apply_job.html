@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Apply for {{ job.title }}</h2>
+<form action="{% url 'jobs:apply' job_id=job.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="resume">Upload your resume:</label>
+    <input type="file" name="resume" id="resume" required>
+    <button type="submit">Apply</button>
+</form>
+{% endblock %}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Listings</title>
+    <style>
+        body {
+            background: #181818;
+            color: #f1f1f1;
+            font-family: Arial, sans-serif;
+        }
+        .job-card {
+            background: #222;
+            border-radius: 8px;
+            margin: 20px auto;
+            padding: 24px;
+            max-width: 500px;
+            box-shadow: 0 2px 8px #000a;
+        }
+        .job-card h2 {
+            color: #fff;
+        }
+        .job-card p {
+            color: #ccc;
+        }
+        .apply-btn {
+            background: #111;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .apply-btn:hover {
+            background: #333;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #222;
+            padding: 30px;
+            border-radius: 8px;
+            width: 350px;
+            color: #fff;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            right: 16px;
+            top: 10px;
+            color: #aaa;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        input[type="file"], input[type="submit"] {
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">Available Jobs</h1>
+    {% for job in jobs %}
+        <div class="job-card">
+            <h2>{{ job.job_title }}</h2>
+            <p>{{ job.location }}</p>
+            <p>Offer: {{ job.min_offer }} - {{ job.max_offer }}</p>
+            <button class="apply-btn" onclick="openModal({{ job.id }}, '{{ job.job_title|escapejs }}')">Apply</button>
+        </div>
+    {% empty %}
+        <p style="text-align:center;">No jobs available.</p>
+    {% endfor %}
+
+    <!-- Modal -->
+    <div id="applyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalJobTitle"></h2>
+            <form id="applyForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="resume_image" accept="image/*" required><br>
+                <input type="submit" value="Submit Application" class="apply-btn">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentJobId = null;
+        function openModal(jobId, jobTitle) {
+            currentJobId = jobId;
+            document.getElementById('modalJobTitle').textContent = 'Apply for: ' + jobTitle;
+            document.getElementById('applyForm').action = '/jobs/' + jobId + '/apply/';
+            document.getElementById('applyModal').style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('applyModal').style.display = 'none';
+        }
+        // Close modal on outside click
+        window.onclick = function(event) {
+            let modal = document.getElementById('applyModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
