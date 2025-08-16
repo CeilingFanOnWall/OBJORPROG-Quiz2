@@ -146,9 +146,3 @@ manage.py              # Django CLI entry point
 ---
 
 ```
-
----
-
-Would you like me to also **generate the `requirements.txt`** (with pinned Django + supporting packages), so anyone following this README can just install everything without errors?
-```
-
